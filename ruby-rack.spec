@@ -1,4 +1,5 @@
 Summary:	Modular interface to webservers
+Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-rack
 Version:	0.1.0
 Release:	1
@@ -20,6 +21,14 @@ developing web applications in Ruby. By wrapping HTTP requests and
 responses in the simplest way possible, it unifies and distills the
 API for web servers, web frameworks, and software in between (the
 so-called middleware) into a single method call.
+
+%description -l pl.UTF-8
+Rack dostarcza minimalny, modularny i adaptowalny interfejs do
+tworzenia aplikacji WWW w języku Ruby. Opakowując zapytania i
+odpowiedzi HTTP w sposób najprostszy z możliwych, unifikuje oraz
+przekształca API dla serwerów WWW, szkieletów aplikacji WWW i
+oprogramowania znajdującego się między nimi (tzw. middleware) w
+jedno wywołanie metody.
 
 %prep
 %setup -q -n rack-%{version}
