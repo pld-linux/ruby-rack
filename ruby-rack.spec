@@ -1,12 +1,12 @@
 Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-rack
-Version:	0.3.0
+Version:	0.9.1
 Release:	1
 License:	MIT
 Group:		Development/Libraries
 Source0:	http://chneukirchen.org/releases/rack-%{version}.tar.gz
-# Source0-md5:	dd2fc4cc1b15597a167953afd4652ce1
+# Source0-md5:	7c7b202a1a9b7ac60f3853bc74425525
 URL:		http://rubyforge.org/projects/rack
 BuildRequires:	rpmbuild(macros) >= 1.277
 BuildRequires:	ruby-modules
