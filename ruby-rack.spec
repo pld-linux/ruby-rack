@@ -1,18 +1,19 @@
+%define pkgname rack
 Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
-Name:		ruby-rack
+Name:		ruby-%{pkgname}
 Version:	1.1.0
 Release:	1
 License:	MIT
 Group:		Development/Libraries
-Source0:	http://chneukirchen.org/releases/rack-%{version}.tar.gz
+Source0:	http://chneukirchen.org/releases/%{pkgname}-%{version}.tar.gz
 # Source0-md5:	4e51024e1a449ae120af75f0a7cffb65
 URL:		http://rubyforge.org/projects/rack
-BuildRequires:	rpmbuild(macros) >= 1.277
+BuildRequires:	rpmbuild(macros) >= 1.484
+BuildRequires:	ruby >= 1:1.8.6
 BuildRequires:	ruby-modules
-BuildRequires:	setup.rb
-#BuildArch:	noarch
 %{?ruby_mod_ver_requires_eq}
+#BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -30,32 +31,64 @@ przekształca API dla serwerów WWW, szkieletów aplikacji WWW i
 oprogramowania znajdującego się między nimi (tzw. middleware) w
 jedno wywołanie metody.
 
+%package rdoc
+Summary:	HTML documentation for %{pkgname}
+Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla %{pkgname}
+Group:		Documentation
+Requires:	ruby >= 1:1.8.7-4
+
+%description rdoc
+HTML documentation for %{pkgname}.
+
+%description rdoc -l pl.UTF-8
+Dokumentacja w formacie HTML dla %{pkgname}.
+
+%package ri
+Summary:	ri documentation for %{pkgname}
+Summary(pl.UTF-8):	Dokumentacja w formacie ri dla %{pkgname}
+Group:		Documentation
+Requires:	ruby
+
+%description ri
+ri documentation for %{pkgname}.
+
+%description ri -l pl.UTF-8
+Dokumentacji w formacie ri dla %{pkgname}.
+
 %prep
-%setup -q -n rack-%{version}
+%setup -q -n %{pkgname}-%{version}
+
+%{__sed} -i -e 's|/usr/bin/env ruby|%{__ruby}|' bin/rackup
 
 %build
-cp %{_datadir}/setup.rb .
-ruby setup.rb config \
-	--rbdir=%{ruby_rubylibdir} \
-	--sodir=%{ruby_archdir}
-
-ruby setup.rb setup
-
-rdoc -o rdoc lib SPEC
+rdoc --ri --op ri lib
+rdoc --op rdoc lib
+rm -r ri/{Context,FCGI,HeaderHash,Multipart}
+rm ri/created.rid
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{ruby_rubylibdir}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{ruby_rubylibdir},%{ruby_ridir},%{ruby_rdocdir}}
 
-ruby setup.rb install \
-	--prefix=$RPM_BUILD_ROOT
+cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
+cp -a lib/* $RPM_BUILD_ROOT%{ruby_rubylibdir}
+cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
+cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc rdoc README ChangeLog example/*
+%doc README ChangeLog example/*
 %attr(755,root,root) %{_bindir}/*
 %{ruby_rubylibdir}/rack
 %{ruby_rubylibdir}/rack.rb
+
+%files rdoc
+%defattr(644,root,root,755)
+%{ruby_rdocdir}/%{name}-%{version}
+
+%files ri
+%defattr(644,root,root,755)
+%{ruby_ridir}/Rack
