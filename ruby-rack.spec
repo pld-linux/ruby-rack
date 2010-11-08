@@ -2,12 +2,12 @@
 Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-%{pkgname}
-Version:	1.2.0
+Version:	1.2.1
 Release:	1
 License:	MIT
 Group:		Development/Libraries
 Source0:	http://chneukirchen.org/releases/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	93220a918599ace6d79182c8be69c068
+# Source0-md5:	b427cf90880ff91eeae97c576b5c0c2a
 URL:		http://rubyforge.org/projects/rack
 BuildRequires:	rpmbuild(macros) >= 1.484
 BuildRequires:	ruby >= 1:1.8.6
@@ -28,8 +28,8 @@ Rack dostarcza minimalny, modularny i adaptowalny interfejs do
 tworzenia aplikacji WWW w języku Ruby. Opakowując zapytania i
 odpowiedzi HTTP w sposób najprostszy z możliwych, unifikuje oraz
 przekształca API dla serwerów WWW, szkieletów aplikacji WWW i
-oprogramowania znajdującego się między nimi (tzw. middleware) w
-jedno wywołanie metody.
+oprogramowania znajdującego się między nimi (tzw. middleware) w jedno
+wywołanie metody.
 
 %package rdoc
 Summary:	HTML documentation for %{pkgname}
@@ -63,8 +63,7 @@ Dokumentacji w formacie ri dla %{pkgname}.
 %build
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
-rm -r ri/{Context,FCGI,HeaderHash,Multipart}
-rm ri/created.rid
+%{__rm} -fr ri/{FCGI,created.rid,cache.ri}
 
 %install
 rm -rf $RPM_BUILD_ROOT
