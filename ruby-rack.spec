@@ -2,12 +2,12 @@
 Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-%{pkgname}
-Version:	1.2.1
+Version:	1.2.2
 Release:	1
 License:	MIT
 Group:		Development/Libraries
 Source0:	http://chneukirchen.org/releases/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	b427cf90880ff91eeae97c576b5c0c2a
+# Source0-md5:	efe64229075a413988a2ba3ea4029143
 URL:		http://rubyforge.org/projects/rack
 BuildRequires:	rpmbuild(macros) >= 1.484
 BuildRequires:	ruby >= 1:1.8.6
