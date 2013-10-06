@@ -1,19 +1,30 @@
-%define pkgname rack
+#
+# Conditional build:
+%bcond_with	tests		# build without tests
+
+%define	pkgname	rack
 Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-%{pkgname}
 Version:	1.3.0
-Release:	1
+Release:	2
 License:	MIT
 Group:		Development/Libraries
-Source0:	http://chneukirchen.org/releases/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	d3d61ab6de2d7475f9b85289a75c543b
+Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
+# Source0-md5:	765f523bb32c4475bfcb6898eddbc877
 URL:		http://rubyforge.org/projects/rack
-BuildRequires:	rpmbuild(macros) >= 1.484
-BuildRequires:	ruby >= 1:1.8.6
-BuildRequires:	ruby-modules
-%{?ruby_mod_ver_requires_eq}
-#BuildArch:	noarch
+BuildRequires:	rpm-rubyprov
+BuildRequires:	rpmbuild(macros) >= 1.656
+BuildRequires:	sed >= 4.0
+%if %{with tests}
+BuildRequires:	ruby-bacon
+BuildRequires:	ruby-fcgi
+BuildRequires:	ruby-memcache-client
+BuildRequires:	ruby-mongrel
+BuildRequires:	ruby-rake
+BuildRequires:	ruby-thin
+%endif
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -57,32 +68,35 @@ Dokumentacji w formacie ri dla %{pkgname}.
 
 %prep
 %setup -q -n %{pkgname}-%{version}
-
-%{__sed} -i -e 's|/usr/bin/env ruby|%{__ruby}|' bin/rackup
+%{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %build
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
-%{__rm} -fr ri/{FCGI,created.rid,cache.ri}
+%{__rm} -r ri/{FCGI,created.rid,cache.ri}
+%{__rm} ri/Object/cdesc-Object.ri
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{ruby_rubylibdir},%{ruby_ridir},%{ruby_rdocdir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{ruby_vendorlibdir},%{ruby_ridir},%{ruby_rdocdir}}
 
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
-cp -a lib/* $RPM_BUILD_ROOT%{ruby_rubylibdir}
+cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -a example/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README ChangeLog example/*
-%attr(755,root,root) %{_bindir}/*
-%{ruby_rubylibdir}/rack
-%{ruby_rubylibdir}/rack.rb
+%doc README KNOWN-ISSUES COPYING
+%attr(755,root,root) %{_bindir}/rackup
+%{ruby_vendorlibdir}/rack.rb
+%{ruby_vendorlibdir}/rack
+%{_examplesdir}/%{name}-%{version}
 
 %files rdoc
 %defattr(644,root,root,755)
