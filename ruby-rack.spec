@@ -14,7 +14,7 @@ Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
 # Source0-md5:	765f523bb32c4475bfcb6898eddbc877
 URL:		http://rubyforge.org/projects/rack
 BuildRequires:	rpm-rubyprov
-BuildRequires:	rpmbuild(macros) >= 1.656
+BuildRequires:	rpmbuild(macros) >= 1.665
 BuildRequires:	sed >= 4.0
 %if %{with tests}
 BuildRequires:	ruby-bacon
@@ -71,6 +71,9 @@ Dokumentacji w formacie ri dla %{pkgname}.
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %build
+# write .gemspec
+%__gem_helper spec
+
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
 %{__rm} -r ri/{FCGI,created.rid,cache.ri}
@@ -78,12 +81,14 @@ rdoc --op rdoc lib
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{ruby_vendorlibdir},%{ruby_ridir},%{ruby_rdocdir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{ruby_vendorlibdir},%{ruby_specdir},%{ruby_ridir},%{ruby_rdocdir}}
 
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
+cp -p %{pkgname}-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
+
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 cp -a example/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -96,6 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/rackup
 %{ruby_vendorlibdir}/rack.rb
 %{ruby_vendorlibdir}/rack
+%{ruby_specdir}/%{pkgname}-%{version}.gemspec
 %{_examplesdir}/%{name}-%{version}
 
 %files rdoc
