@@ -7,7 +7,7 @@ Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-%{pkgname}
 Version:	1.3.0
-Release:	2
+Release:	3
 License:	MIT
 Group:		Development/Libraries
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
@@ -77,7 +77,7 @@ Dokumentacji w formacie ri dla %{pkgname}.
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
 %{__rm} -r ri/{FCGI,created.rid,cache.ri}
-%{__rm} ri/Object/cdesc-Object.ri
+%{__rm} ri/URI/cdesc-URI.ri
 
 %install
 rm -rf $RPM_BUILD_ROOT
