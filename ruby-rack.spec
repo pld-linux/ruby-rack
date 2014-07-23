@@ -7,7 +7,7 @@ Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-%{pkgname}
 Version:	1.3.0
-Release:	3
+Release:	4
 License:	MIT
 Group:		Development/Libraries
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
