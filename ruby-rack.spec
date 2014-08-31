@@ -6,12 +6,12 @@
 Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-%{pkgname}
-Version:	1.3.0
-Release:	4
+Version:	1.4.5
+Release:	1
 License:	MIT
 Group:		Development/Libraries
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
-# Source0-md5:	765f523bb32c4475bfcb6898eddbc877
+# Source0-md5:	6661d225210f6b48f83fb279aba0a149
 URL:		http://rubyforge.org/projects/rack
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.665
@@ -97,7 +97,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README KNOWN-ISSUES COPYING
+%doc README.rdoc
 %attr(755,root,root) %{_bindir}/rackup
 %{ruby_vendorlibdir}/rack.rb
 %{ruby_vendorlibdir}/rack
