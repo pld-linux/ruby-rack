@@ -6,23 +6,17 @@
 Summary:	Modular interface to webservers
 Summary(pl.UTF-8):	Modularny interfejs do serwerów WWW
 Name:		ruby-%{pkgname}
-Version:	1.4.5
-Release:	3
+Version:	3.2.5
+Release:	1
 License:	MIT
 Group:		Development/Libraries
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
-# Source0-md5:	6661d225210f6b48f83fb279aba0a149
-URL:		http://rubyforge.org/projects/rack
+# Source0-md5:	ee7a83d79014045fef1d1ebde76e6d04
+URL:		https://github.com/rack/rack
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.665
-BuildRequires:	sed >= 4.0
 %if %{with tests}
-BuildRequires:	ruby-bacon
-BuildRequires:	ruby-fcgi
-BuildRequires:	ruby-memcache-client
-BuildRequires:	ruby-mongrel
-BuildRequires:	ruby-rake
-BuildRequires:	ruby-thin
+BuildRequires:	ruby-minitest
 %endif
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -34,6 +28,9 @@ responses in the simplest way possible, it unifies and distills the
 API for web servers, web frameworks, and software in between (the
 so-called middleware) into a single method call.
 
+Also, the rackup command has been moved to a separate gem called
+rackup. Install that gem for the rackup command.
+
 %description -l pl.UTF-8
 Rack dostarcza minimalny, modularny i adaptowalny interfejs do
 tworzenia aplikacji WWW w języku Ruby. Opakowując zapytania i
@@ -41,6 +38,9 @@ odpowiedzi HTTP w sposób najprostszy z możliwych, unifikuje oraz
 przekształca API dla serwerów WWW, szkieletów aplikacji WWW i
 oprogramowania znajdującego się między nimi (tzw. middleware) w jedno
 wywołanie metody.
+
+Polecenie rackup zostało przeniesione do osobnego gema o nazwie
+rackup.
 
 %package rdoc
 Summary:	HTML documentation for %{pkgname}
@@ -68,7 +68,6 @@ Dokumentacji w formacie ri dla %{pkgname}.
 
 %prep
 %setup -q -n %{pkgname}-%{version}
-%{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %build
 # write .gemspec
@@ -76,33 +75,27 @@ Dokumentacji w formacie ri dla %{pkgname}.
 
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
-%{__rm} -r ri/{FCGI,created.rid,cache.ri}
-%{__rm} ri/URI/cdesc-URI.ri
+%{__rm} ri/created.rid
+%{__rm} ri/cache.ri
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{ruby_vendorlibdir},%{ruby_specdir},%{ruby_ridir},%{ruby_rdocdir}}
+install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{ruby_specdir},%{ruby_ridir},%{ruby_rdocdir}}
 
-cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
 cp -p %{pkgname}-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
-
-install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-cp -a example/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.rdoc
-%attr(755,root,root) %{_bindir}/rackup
+%doc README.md MIT-LICENSE CHANGELOG.md CONTRIBUTING.md SPEC.rdoc
 %{ruby_vendorlibdir}/rack.rb
 %{ruby_vendorlibdir}/rack
 %{ruby_specdir}/%{pkgname}-%{version}.gemspec
-%{_examplesdir}/%{name}-%{version}
 
 %files rdoc
 %defattr(644,root,root,755)
